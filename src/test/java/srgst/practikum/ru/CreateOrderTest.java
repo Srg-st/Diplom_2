@@ -35,16 +35,17 @@ public class CreateOrderTest {
         email = RandomStringUtils.randomAlphabetic(10) + "@gmail.com";
         password = RandomStringUtils.randomAlphabetic(10);
         name = RandomStringUtils.randomAlphabetic(10);
+
+        userStep.createUser(new User(email, password, name))
+                .then()
+                .assertThat().statusCode(200)
+                .body("success", equalTo(true));
     }
 
     @Test
     @DisplayName("Создание заказа")
     @Description("Создание заказа с авторизацией и ингредиентами")
     public void createOrderAuthorAndIngredTest() {
-        userStep.createUser(new User(email, password, name))
-                .then()
-                .assertThat().statusCode(200)
-                .body("success", equalTo(true));
 
         Response loginResponse = userStep.loginUser(new LoginUser(email, password));
         loginResponse.then().assertThat().
@@ -71,10 +72,6 @@ public class CreateOrderTest {
     @DisplayName("Создание заказа")
     @Description("Создание заказа с авторизацией и без ингредиентов")
     public void createOrderAuthorAndWithoutIngredTest() {
-        userStep.createUser(new User(email, password, name))
-                .then()
-                .assertThat().statusCode(200)
-                .body("success", equalTo(true));
 
         Response loginResponse = userStep.loginUser(new LoginUser(email, password));
         loginResponse.then().assertThat().
@@ -138,10 +135,6 @@ public class CreateOrderTest {
     @DisplayName("Создание заказа")
     @Description("Создание заказа c авторизацией и неправильным хешем ингредиентов")
     public void createOrderAuthorAndWrongIngredTest() {
-        userStep.createUser(new User(email, password, name))
-                .then()
-                .assertThat().statusCode(200)
-                .body("success", equalTo(true));
 
         Response loginResponse = userStep.loginUser(new LoginUser(email, password));
         loginResponse.then().assertThat().

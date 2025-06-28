@@ -48,7 +48,7 @@ public class LoginUserTest {
                 .body("accessToken", notNullValue())
                 .body("refreshToken", notNullValue());
 
-        accessToken = loginResponse.jsonPath().getString("accessToken");
+
     }
 
     @Test
@@ -60,8 +60,7 @@ public class LoginUserTest {
                 .assertThat().statusCode(401)
                 .body("success", equalTo(false))
                 .body("message", equalTo("email or password are incorrect"));
-                //Если пользователь сможет войти в систему с неверным паролем, то accessToken будет не пустым и в блоке After будет удален
-        accessToken = loginResponse.jsonPath().getString("accessToken");
+
     }
 
     @Test
@@ -74,8 +73,7 @@ public class LoginUserTest {
                 .body("success", equalTo(false))
                 .body("message", equalTo("email or password are incorrect"));
 
-        //Если пользователь сможет войти в систему с неверным email, то accessToken будет не пустым и в блоке After будет удален
-        accessToken = loginResponse.jsonPath().getString("accessToken");
+
     }
 
     @Test
@@ -87,8 +85,7 @@ public class LoginUserTest {
                 .assertThat().statusCode(401)
                 .body("success", equalTo(false))
                 .body("message", equalTo("email or password are incorrect"));
-        //Если пользователь сможет войти в систему без пароля, то accessToken будет не пустым и в блоке After будет удален
-                accessToken = loginResponse.jsonPath().getString("accessToken");
+
     }
 
     @Test
@@ -100,12 +97,14 @@ public class LoginUserTest {
                 .assertThat().statusCode(401)
                 .body("success", equalTo(false))
                 .body("message", equalTo("email or password are incorrect"));
-    //Если пользователь сможет войти в систему без email, то accessToken будет не пустым и в блоке After будет удален
-    accessToken = loginResponse.jsonPath().getString("accessToken");
+
 }
 
     @After
     public void tearDown() {
+        Response loginResponse = userStep.loginUser(new LoginUser(email, password));
+        accessToken = loginResponse.jsonPath().getString("accessToken");
+
         try {
             if (accessToken != null) {
                 userStep.deleteUser(accessToken);
